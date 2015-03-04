@@ -12,7 +12,7 @@ PYTHON = python
 
 IMPLS = bash c clojure coffee cs forth go haskell java js lua make mal \
 	ocaml matlab miniMAL perl php ps python r racket ruby rust \
-	scala vb
+	scala vb slalisp
 
 step0 = step0_repl
 step1 = step1_read_print
@@ -80,6 +80,10 @@ rust_STEP_TO_PROG =    rust/target/$($(1))
 scala_STEP_TO_PROG =   scala/$($(1)).scala
 vb_STEP_TO_PROG =      vb/$($(1)).exe
 
+# SLA : Copying js since I will be using javascript
+slalisp_STEP_TO_PROG = js/$($(1)).js
+
+
 # Needed some argument munging
 COMMA = ,
 noop =
@@ -112,6 +116,10 @@ ruby_RUNSTEP =    ruby ../$(2) $(3)
 rust_RUNSTEP =    ../$(2) $(3)
 scala_RUNSTEP =   sbt 'run-main $($(1))$(if $(3), $(3),)'
 vb_RUNSTEP =      mono ../$(2) --raw $(3)
+
+# SLA : Using js as a template
+slalisp_RUNSTEP = node ../$(2) $(3)
+
 
 # Extra options to pass to runtest.py
 cs_TEST_OPTS =  --redirect
@@ -199,4 +207,3 @@ $(IMPL_PERF):
           $(call $(impl)_RUNSTEP,stepA,$(call $(impl)_STEP_TO_PROG,stepA),../tests/perf2.mal); \
 	  echo 'Running: $(call $(impl)_RUNSTEP,stepA,$(call $(impl)_STEP_TO_PROG,stepA),../tests/perf3.mal)'; \
           $(call $(impl)_RUNSTEP,stepA,$(call $(impl)_STEP_TO_PROG,stepA),../tests/perf3.mal))
-
